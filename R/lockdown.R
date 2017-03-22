@@ -9,6 +9,15 @@
 #' @name lockdown
 NULL
 
+#' Remove a file or variable from the lockdown cache
+#'
+#' @param fp The file path.
+#' @param x The variable.
+#' @return Invisibly, returns \code{NA} if the file was not found in the cache,
+#'   and \code{TRUE} if the file was found and removed.
+#' @name lockdownremove
+NULL
+
 #' @rdname lockdown
 #' @export
 lockdown_file <- function (fp, cache_fp=".lockdown_files.rds") {
@@ -24,6 +33,32 @@ lockdown_variable <- function (x, cache_fp=".lockdown_vars.rds") {
   new_md5 <- digest::digest(x)
   result <- .lockdown_check(cache_fp, xname, new_md5)
   result
+}
+
+#' @rdname lockdownremove
+#' @export
+lockdown_remove_file <- function (fp, cache_fp=".lockdown_files.rds") {
+  result <- .lockdown_remove(cache_fp, fp)
+  result
+}
+
+#' @rdname lockdownremove
+#' @export
+lockdown_remove_variable <- function (x, cache_fp=".lockdown_vars.rds") {
+  xname <- deparse(substitute(x))
+  result <- .lockdown_remove(cache_fp, xname)
+  result
+}
+
+.lockdown_remove <- function (cache_fp, name) {
+  cache <- .load_cache(cache_fp)
+  if (name %in% names(cache)) {
+    cache[[name]] <- NULL
+    saveRDS(cache, cache_fp)
+    TRUE
+  } else {
+    NA
+  }
 }
 
 .lockdown_check <- function (cache_fp, key, val) {
