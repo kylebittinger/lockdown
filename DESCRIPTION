@@ -1,12 +1,18 @@
 Package: lockdown
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Check files and variables to make sure they haven't changed
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Kyle Bittinger
+Maintainer: Kyle Bittinger <kylebittinger@gmail.com>
+Description: Erik had this idea during code review: sometimes, when we are
+    producing reports or plots, it would be nice to ensure that certain output
+    files or data structures don't change after a certain point in the code.
+    This package provides functions to check the contents of a file or
+    the value of a variable. During each check, a hash of the current value is
+    compared to a hash from the last time the file or variable was checked.  If
+    the value is unchanged, nothing will happen.  If the value has changed,
+    you'll see a huge nasty error message.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: digest
